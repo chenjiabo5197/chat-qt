@@ -2,7 +2,15 @@
 #define LOGINDIALOG_H
 
 #include <QDialog>
-
+/******************************************************************************
+ *
+ * @file       logindialog.h
+ * @brief      登录窗口
+ *
+ * @author     陈佳波
+ * @date       2024/12/08
+ * @history
+ *****************************************************************************/
 namespace Ui {
 class LoginDialog;
 }

@@ -26,6 +26,7 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+// 定义槽函数
 public slots:
     void SlotSwitchReg();
 private:
