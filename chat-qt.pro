@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui network
 
 # 设置窗口右上角的图标显示
 RC_ICONS = icon.ico
@@ -14,6 +14,7 @@ CONFIG += c++17
 
 SOURCES += \
     global.cpp \
+    httpmgr.cpp \
     logindialog.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -21,9 +22,11 @@ SOURCES += \
 
 HEADERS += \
     global.h \
+    httpmgr.h \
     logindialog.h \
     mainwindow.h \
-    registerdialog.h
+    registerdialog.h \
+    singleton.h
 
 FORMS += \
     logindialog.ui \
