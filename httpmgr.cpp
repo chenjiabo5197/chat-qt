@@ -7,7 +7,7 @@ HttpMgr::~HttpMgr()
 
 HttpMgr::HttpMgr()
 {
-
+    connect(this, &HttpMgr::sig_http_finish, this, &HttpMgr::slot_http_finish);
 }
 
 void HttpMgr::PostHttpReq(QUrl url, QJsonObject json, ReqId req_id, Modules mod)
@@ -21,6 +21,7 @@ void HttpMgr::PostHttpReq(QUrl url, QJsonObject json, ReqId req_id, Modules mod)
     request.setHeader(QNetworkRequest::ContentLengthHeader, QByteArray::number(data.length()));
     // 从类的成员函数内部获取指向该类实例的 std::shared_ptr
     auto self = shared_from_this();
+    // 异步通信的方式
     QNetworkReply * reply = _manager.post(request, data);
     // 收到应答的finish信号，执行lambda表达式,使用self是为了防止HttpMgr被回收导致出问题
     QObject::connect(reply, &QNetworkReply::finished, [self, reply, req_id, mod](){
@@ -44,4 +45,13 @@ void HttpMgr::PostHttpReq(QUrl url, QJsonObject json, ReqId req_id, Modules mod)
         reply->deleteLater();
         return;
     });
+}
+
+void HttpMgr::slot_http_finish(ReqId req_id, QString res, ErrorCodes err, Modules mod)
+{
+    if(mod == Modules::REGISTERMOD)
+    {
+        // 发送信号通知指定模块http的相应结束了
+        emit sig_reg_mod_finish(req_id, res, err);
+    }
 }

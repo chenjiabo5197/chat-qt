@@ -25,10 +25,14 @@ private:
 
     // 发送http请求
     void PostHttpReq(QUrl url, QJsonObject json, ReqId req_id, Modules mod);
-
+private slots:
+    // 槽函数的参数可以比信号传参少，但是不能多
+    void slot_http_finish(ReqId req_id, QString res, ErrorCodes err, Modules mod);
 signals:
     // http发送完后，发送该信号给其他模块
     void sig_http_finish(ReqId req_id, QString res, ErrorCodes err, Modules mod);
+    // 发送信号给注册模块，通知其http已收到回复
+    void sig_reg_mod_finish(ReqId req_id, QString res, ErrorCodes err);
 };
 
 #endif // HTTPMGR_H
