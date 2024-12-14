@@ -22,6 +22,16 @@ int main(int argc, char *argv[])
         qDebug("Open failed");
     }
 
+    QString fileName = "config.ini";
+    // 获取可执行文件的目录
+    QString app_path = QCoreApplication::applicationDirPath();
+    // QDir::separator()为路径的分隔符，会自动区分windows和linux环境
+    QString config_path = QDir::toNativeSeparators(app_path + QDir::separator() + fileName);
+    QSettings settings(config_path, QSettings::IniFormat);
+    QString gate_host = settings.value("GateServer/host").toString();
+    QString gate_port = settings.value("GateServer/port").toString();
+    gate_url_prefix = "http://" + gate_host + ":" + gate_port;
+
     MainWindow w;
     w.show();
     return a.exec();

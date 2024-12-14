@@ -16,15 +16,14 @@ class HttpMgr: public QObject, public Singleton<HttpMgr>, public std::enable_sha
 public:
     // 析构是public的是因为在singleton调用析构时，智能指针会调用httpmgr的析构
     ~HttpMgr();
+    // 发送http请求
+    void PostHttpReq(QUrl url, QJsonObject json, ReqId req_id, Modules mod);
 private:
     // 声明singleton为友元，目的是在singleton的GetInstance函数中需要new T(HttpMgr)对象，为了让其可以访问到HttpMgr的构造函数，所以加一下友元
     friend class Singleton<HttpMgr>;
     HttpMgr();
     // 用于发送网络请求并接收网络回复
     QNetworkAccessManager _manager;
-
-    // 发送http请求
-    void PostHttpReq(QUrl url, QJsonObject json, ReqId req_id, Modules mod);
 private slots:
     // 槽函数的参数可以比信号传参少，但是不能多
     void slot_http_finish(ReqId req_id, QString res, ErrorCodes err, Modules mod);
