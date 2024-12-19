@@ -28,6 +28,8 @@ private slots:
     void on_get_code_btn_clicked();
     void slot_reg_mod_finish(ReqId req_id, QString res, ErrorCodes err);
 
+    void on_sure_btn_clicked();
+
 private:
     // 初始化http处理函数
     void initHttpHandlers();
