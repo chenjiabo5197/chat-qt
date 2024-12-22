@@ -34,6 +34,17 @@ private:
     // 初始化http处理函数
     void initHttpHandlers();
     void showTip(QString str, bool b_ok);
+
+    void AddTipErr(TipErr te, QString tips);
+    void DelTipErr(TipErr te);
+    QMap<TipErr, QString> _tip_errs;
+
+    bool checkUserValid();
+    bool checkEmailValid();
+    bool checkPassValid();
+    bool checkConfirmValid();
+    bool checkVerifyValid();
+
     Ui::RegisterDialog *ui;
     // http处理函数的map，处理函数接受的参数是一个json对象
     QMap<ReqId, std::function<void(const QJsonObject&)>> _handlers;
