@@ -30,6 +30,8 @@ private slots:
 
     void on_sure_btn_clicked();
 
+    void on_return_btn_clicked();
+
 private:
     // 初始化http处理函数
     void initHttpHandlers();
@@ -48,6 +50,15 @@ private:
     Ui::RegisterDialog *ui;
     // http处理函数的map，处理函数接受的参数是一个json对象
     QMap<ReqId, std::function<void(const QJsonObject&)>> _handlers;
+    // 计时器
+    QTimer* _countdown_timer;
+    // 倒计时数字
+    int _countdown;
+    // 切换登录界面的页码
+    void ChangeTipPage();
+
+signals:
+    void sigSwitchLogin();
 };
 
 #endif // REGISTERDIALOG_H

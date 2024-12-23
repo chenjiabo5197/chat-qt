@@ -32,7 +32,7 @@ private:
     ClickLbState _curState;
 
 signals:
-
+    void clicked();
 };
 
 #endif // CLICKEDLABLE_H

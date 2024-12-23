@@ -29,6 +29,7 @@ public:
 // 定义槽函数
 public slots:
     void SlotSwitchReg();
+    void SlotSwitchLogin();
 private:
     Ui::MainWindow *ui;
     LoginDialog * _login_dlg;

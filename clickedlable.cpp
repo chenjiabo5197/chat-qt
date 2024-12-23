@@ -21,6 +21,7 @@ void ClickedLable::mousePressEvent(QMouseEvent *ev)
             _curState = ClickLbState::Selected;
             setProperty("state", _selected_hover);
             repolish(this);
+            // 更新
             update();
         }
         else
@@ -39,20 +40,59 @@ void ClickedLable::mousePressEvent(QMouseEvent *ev)
 
 void ClickedLable::enterEvent(QEnterEvent *event)
 {
-
+    if(_curState == ClickLbState::Normal)
+    {
+        qDebug() << "enter, change to normal hover: " << _normal_hover;
+        setProperty("state", _normal_hover);
+        repolish(this);
+        update();
+    }
+    else
+    {
+        qDebug() << "enter, change to selected hover: " << _selected_hover;
+        setProperty("state", _selected_hover);
+        repolish(this);
+        update();
+    }
+    QLabel::enterEvent(event);
 }
 
 void ClickedLable::leaveEvent(QEvent *event)
 {
-
+    if(_curState == ClickLbState::Normal)
+    {
+        qDebug() << "leave, change to normal hover: " << _normal;
+        setProperty("state", _normal);
+        repolish(this);
+        update();
+    }
+    else
+    {
+        qDebug() << "leave, change to selected hover: " << _selected;
+        setProperty("state", _selected);
+        repolish(this);
+        update();
+    }
+    QLabel::leaveEvent(event);
 }
 
 void ClickedLable::SetState(QString normal, QString hover, QString press, QString select, QString select_hover, QString select_press)
 {
+    _normal = normal;
+    _normal_hover = hover;
+    _normal_press = press;
 
+    _selected = select;
+    _selected_hover = select_hover;
+    _selected_press = select_press;
+
+    // 设置标签当前的格式为默认状态
+    setProperty("state", normal);
+    // 更新当前格式
+    repolish(this);
 }
 
 ClickLbState ClickedLable::GetCurState()
 {
-
+    return _curState;
 }
