@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include "logindialog.h"
 #include "registerdialog.h"
+#include "resetdialog.h"
+
 /******************************************************************************
  *
  * @file       mainwindow.h
@@ -29,10 +31,14 @@ public:
 // 定义槽函数
 public slots:
     void SlotSwitchReg();
-    void SlotSwitchLogin();
+    void SlotRegSwitchLogin();
+    void SlotResetSwitchLogin();
+    void SlotSwitchReset();
+
 private:
     Ui::MainWindow *ui;
     LoginDialog * _login_dlg;
     RegisterDialog * _reg_dlg;
+    ResetDialog* _reset_dlg;
 };
 #endif // MAINWINDOW_H

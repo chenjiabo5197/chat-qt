@@ -17,6 +17,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     // 创建和注册消息连接
     connect(_login_dlg, &LoginDialog::switchRegister, this, &MainWindow::SlotSwitchReg);
+    // 重置密码功能槽函数和信号连接
+    connect(_login_dlg, &LoginDialog::switchReset, this, &MainWindow::SlotSwitchReset);
 
 }
 
@@ -42,19 +44,46 @@ void MainWindow::SlotSwitchReg()
     _reg_dlg = new RegisterDialog(this);
     _reg_dlg->setWindowFlags(Qt::CustomizeWindowHint|Qt::FramelessWindowHint);
 
-    connect(_reg_dlg, &RegisterDialog::sigSwitchLogin, this, &MainWindow::SlotSwitchLogin);
+    connect(_reg_dlg, &RegisterDialog::sigSwitchLogin, this, &MainWindow::SlotRegSwitchLogin);
 
     setCentralWidget(_reg_dlg);
     _login_dlg->hide();
     _reg_dlg->show();
 }
 
-void MainWindow::SlotSwitchLogin()
+void MainWindow::SlotRegSwitchLogin()
 {
     // 从登录切换到注册时，登录界面会被析构掉，所以此处需要重新创建
     _login_dlg = new LoginDialog(this);
     _login_dlg->setWindowFlags(Qt::CustomizeWindowHint|Qt::FramelessWindowHint);
     setCentralWidget(_login_dlg);
     _login_dlg->show();
+    _reg_dlg->hide();
     connect(_login_dlg, &LoginDialog::switchRegister, this, &MainWindow::SlotSwitchReg);
+    connect(_login_dlg, &LoginDialog::switchReset, this, &MainWindow::SlotSwitchReset);
+}
+
+void MainWindow::SlotResetSwitchLogin()
+{
+    // 从重置切换到注册时，登录界面会被析构掉，所以此处需要重新创建
+    _login_dlg = new LoginDialog(this);
+    _login_dlg->setWindowFlags(Qt::CustomizeWindowHint|Qt::FramelessWindowHint);
+    setCentralWidget(_login_dlg);
+    _login_dlg->show();
+    _reset_dlg->hide();
+    connect(_login_dlg, &LoginDialog::switchRegister, this, &MainWindow::SlotSwitchReg);
+    connect(_login_dlg, &LoginDialog::switchReset, this, &MainWindow::SlotSwitchReset);
+}
+
+void MainWindow::SlotSwitchReset()
+{
+    // 在这里动态的初始化重置界面，当从注册界面切换到其他界面时，会回收重置界面
+    _reset_dlg = new ResetDialog(this);
+    _reset_dlg->setWindowFlags(Qt::CustomizeWindowHint|Qt::FramelessWindowHint);
+
+    connect(_reset_dlg, &ResetDialog::switchLogin, this, &MainWindow::SlotResetSwitchLogin);
+
+    setCentralWidget(_reset_dlg);
+    _login_dlg->hide();
+    _reset_dlg->show();
 }

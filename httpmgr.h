@@ -32,6 +32,8 @@ signals:
     void sig_http_finish(ReqId req_id, QString res, ErrorCodes err, Modules mod);
     // 发送信号给注册模块，通知其http已收到回复
     void sig_reg_mod_finish(ReqId req_id, QString res, ErrorCodes err);
+    // 发送信号给重置模块，通知其http已收到回复
+    void sig_reset_mod_finish(ReqId req_id, QString res, ErrorCodes err);
 };
 
 #endif // HTTPMGR_H

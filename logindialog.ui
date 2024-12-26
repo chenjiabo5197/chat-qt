@@ -169,7 +169,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QLabel" name="forget_label">
+        <widget class="ClickedLable" name="forget_label">
          <property name="minimumSize">
           <size>
            <width>0</width>
@@ -305,6 +305,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>ClickedLable</class>
+   <extends>QLabel</extends>
+   <header>clickedlable.h</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="rc.qrc"/>
  </resources>

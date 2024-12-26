@@ -3,7 +3,8 @@
 
 ClickedLable::ClickedLable(QWidget *parent): QLabel(parent), _curState(ClickLbState::Normal)
 {
-
+    // 让鼠标在此区域变成小手样式
+    this->setCursor(Qt::PointingHandCursor);
 }
 
 ClickedLable::~ClickedLable()

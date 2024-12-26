@@ -263,7 +263,6 @@ bool RegisterDialog::checkConfirmValid()
         AddTipErr(TipErr::TIP_CONFIRM_ERR, tr("确认密码长度应为6~15"));
         return false;
     }
-    DelTipErr(TipErr::TIP_CONFIRM_ERR);
     // 密码应该是6-15位的字符，包含字母数据和特殊字符
     QRegularExpression regex(R"(^[a-zA-Z0-9!@#$%^&*]{6,15}$)");
     bool match = regex.match(confirm).hasMatch();
@@ -344,6 +343,13 @@ void RegisterDialog::on_sure_btn_clicked()
 
 
 void RegisterDialog::on_return_btn_clicked()
+{
+    _countdown_timer->stop();
+    emit sigSwitchLogin();
+}
+
+
+void RegisterDialog::on_cancel_btn_clicked()
 {
     _countdown_timer->stop();
     emit sigSwitchLogin();
