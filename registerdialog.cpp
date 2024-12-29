@@ -239,7 +239,6 @@ bool RegisterDialog::checkPassValid()
         AddTipErr(TipErr::TIP_PWD_ERR, tr("密码长度应为6~15"));
         return false;
     }
-    DelTipErr(TipErr::TIP_PWD_ERR);
     // 密码应该是6-15位的字符，包含字母数据和特殊字符
     QRegularExpression regex(R"(^[a-zA-Z0-9!@#$%^&*]{6,15}$)");
     bool match = regex.match(pass).hasMatch();

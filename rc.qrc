@@ -17,5 +17,11 @@
         <file>res/unvisible_hover.png</file>
         <file>res/visible.png</file>
         <file>res/visible_hover.png</file>
+        <file>res/filedir.png</file>
+        <file>res/filedir_hover.png</file>
+        <file>res/filedir_press.png</file>
+        <file>res/smile.png</file>
+        <file>res/smile_hover.png</file>
+        <file>res/smile_press.png</file>
     </qresource>
 </RCC>

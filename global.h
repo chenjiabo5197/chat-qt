@@ -35,6 +35,7 @@ enum ReqId{
 enum Modules{
     REGISTERMOD = 0,        // 注册模块
     RESETMOD = 1,           // 重置模块
+    LOGINMOD = 2,           // 登录模块
 };
 
 enum TipErr{
@@ -56,6 +57,14 @@ enum ErrorCodes{
 enum ClickLbState{
     Normal = 0,         // 闭眼，即密码不显示
     Selected = 1,       // 睁眼，显示密码
+};
+
+// 登录成功后，服务器返回的信息结构体
+struct ServerInfo{
+    QString Host;
+    QString Port;
+    QString Token;
+    int Uid;
 };
 
 extern QString gate_url_prefix;

@@ -71,7 +71,7 @@
       <item>
        <widget class="QLabel" name="email_lb">
         <property name="text">
-         <string>密码:   </string>
+         <string>邮箱:   </string>
         </property>
        </widget>
       </item>

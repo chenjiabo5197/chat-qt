@@ -4,6 +4,16 @@
 #include <QLabel>
 #include "global.h"
 
+/******************************************************************************
+ *
+ * @file       clickedlable.h
+ * @brief      自定义label，可以在鼠标悬浮和点击时切换不同的渲染
+ *
+ * @author     陈佳波
+ * @date       2024/12/28
+ * @history
+ *****************************************************************************/
+
 class ClickedLable : public QLabel
 {
     Q_OBJECT
