@@ -43,7 +43,7 @@ void ResetDialog::on_verify_btn_clicked()
         // 发送验证码
         QJsonObject json_obj;
         json_obj["email"] = email;
-        HttpMgr::GetInstance()->PostHttpReq(QUrl(gate_url_prefix + "/get_verifycode"), json_obj, ReqId::ID_GET_VARIFY_CODE, Modules::REGISTERMOD);
+        HttpMgr::GetInstance()->PostHttpReq(QUrl(gate_url_prefix + "/get_verifycode"), json_obj, ReqId::ID_GET_VARIFY_CODE, Modules::RESETMOD);
     }
     else
     {
@@ -149,14 +149,13 @@ void ResetDialog::DelTipErr(TipErr te)
 void ResetDialog::initHandlers()
 {
     // 注册获取验证码回调的逻辑
-    _handlers.insert(ReqId::ID_GET_VARIFY_CODE, [this](const QJsonObject& jsonObj){
+    _handlers.insert(ReqId::ID_GET_VARIFY_CODE, [this](QJsonObject jsonObj){
         int error = jsonObj["error"].toInt();
         if(error != ErrorCodes::SUCCESS)
         {
             showTip(tr("参数错误"), false);
             return;
         }
-
         auto email = jsonObj["email"].toString();
         showTip(tr("验证码已经发送到邮箱，请注意查收"), true);
         qDebug() << "email=" << email;

@@ -1,5 +1,6 @@
 #include "tcpmgr.h"
 #include <QAbstractSocket>
+#include <QJsonDocument>
 
 TcpMgr::~TcpMgr()
 {
@@ -62,21 +63,104 @@ TcpMgr::TcpMgr(): _host(""), _port(0), _b_recv_pending(false), _message_id(0), _
             handleMsg(ReqId(_message_id), _message_len, messageBody);
         }
     });
+
+    // 处理错误
+    connect(&_socket, QOverload<QAbstractSocket::SocketError>::of(&QTcpSocket::errorOccurred), [&](QAbstractSocket::SocketError socketError){
+        qDebug() << "error=" << _socket.errorString();
+        switch (socketError) {
+        case QTcpSocket::ConnectionRefusedError:
+            qDebug() << "Connection refused";
+            emit sig_conn_success(false);
+            break;
+        case QTcpSocket::RemoteHostClosedError:
+            qDebug() << "Remote host closed connection";
+            break;
+        case QTcpSocket::HostNotFoundError:
+            qDebug() << "host not found";
+            emit sig_conn_success(false);
+            break;
+        case QTcpSocket::SocketTimeoutError:
+            qDebug() << "connection timeout";
+            emit sig_conn_success(false);
+            break;
+        case QTcpSocket::NetworkError:
+            qDebug() << "network error";
+            break;
+        default:
+            qDebug() << "other error";
+            break;
+        }
+    });
+
+    // 处理连接断开
+    connect(&_socket, &QTcpSocket::disconnected, [&](){
+        qDebug() << "disconnected from server";
+    });
+
+    // 连接发送信号用于发送数据
+    connect(this, &TcpMgr::sig_send_data, this, &TcpMgr::slot_send_data);
+
+    // 注册处理函数
+    initHandlers();
+
 }
 
 void TcpMgr::initHandlers()
 {
+    _handlers.insert(ID_CHAT_LOGIN_RSP, [this](ReqId id, int len, QByteArray data){
+        Q_UNUSED(len);
+        qDebug() << "handle id=" << id << ", data=" << data;
+        // 将QByteArray转换为QJsonDocument
+        QJsonDocument jsonDoc = QJsonDocument::fromJson(data);
 
+        // 检查转换是否成功
+        if(jsonDoc.isNull())
+        {
+            qDebug() << "failed to create QJsonDocument";
+            return;
+        }
+
+        QJsonObject jsonObj = jsonDoc.object();
+        if(!jsonObj.contains("error"))
+        {
+            int err = ErrorCodes::ERR_JSON;
+            qDebug() << "login failed, err is json parse err" << err;
+            emit sig_login_failed(err);
+            return;
+        }
+
+        int err = jsonObj["error"].toInt();
+        if(err != ErrorCodes::SUCCESS)
+        {
+            qDebug() << "login failed, err=" << err;
+            emit sig_login_failed(err);
+            return;
+        }
+
+        emit sig_switch_chatDlg();
+    });
 }
 
 void TcpMgr::handleMsg(ReqId id, int len, QByteArray data)
 {
-
+    auto find_iter = _handlers.find(id);
+    if(find_iter == _handlers.end())
+    {
+        qDebug() << "not found id=" << id << ", to handle";
+        return;
+    }
+    find_iter.value()(id, len, data);
 }
 
-void TcpMgr::slot_tcp_connect(ServerInfo)
+void TcpMgr::slot_tcp_connect(ServerInfo si)
 {
-
+    qDebug() << "receive tcp connect signal";
+    // 尝试连接到服务器
+    qDebug() << "connecting to server...";
+    _host = si.Host;
+    _port = static_cast<uint16_t>(si.Port.toUInt());
+    // 连接服务器，连接的结果通过在构造函数里声明的connect里的回调函数通知
+    _socket.connectToHost(_host, _port);
 }
 
 void TcpMgr::slot_send_data(ReqId id, QString data)
